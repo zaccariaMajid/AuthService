@@ -1,0 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AuthService.Domain.Common;
+
+namespace AuthService.Domain.Common;
+
+public abstract record DomainEvent : IDomainEvents
+{
+    public DateTime OccurredOn { get; init; } = DateTime.UtcNow;
+}
