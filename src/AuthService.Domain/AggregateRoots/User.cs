@@ -13,7 +13,7 @@ namespace AuthService.Domain.AggregateRoots;
 public class User : AggregateRoot<Guid>
 {
     public Email Email { get; private set; } = null!;
-    public string PasswordHash { get; private set; } = null!;
+    public PasswordHash PasswordHash { get; private set; } = null!;
     public string FirstName { get; private set; } = null!;
     public string LastName { get; private set; } = null!;
     public bool IsActive { get; private set; }
@@ -22,7 +22,7 @@ public class User : AggregateRoot<Guid>
 
     private User() { }
 
-    private User(Email email, string passwordHash, string firstName, string lastName)
+    private User(Email email, PasswordHash passwordHash, string firstName, string lastName)
     {
         Id = Guid.NewGuid();
         Email = email;
@@ -37,7 +37,7 @@ public class User : AggregateRoot<Guid>
         AddDomainEvent(new UserRegistered(Id, Email.Value));
     }
 
-    public static User Create(Email email, string passwordHash, string firstName, string lastName)
+    public static User Create(Email email, PasswordHash passwordHash, string firstName, string lastName)
     {
         if (string.IsNullOrWhiteSpace(firstName))
             throw new DomainException("First name cannot be empty.");
@@ -46,6 +46,13 @@ public class User : AggregateRoot<Guid>
             throw new DomainException("Last name cannot be empty.");
 
         return new User(email, passwordHash, firstName, lastName);
+    }
+
+    public void ChangePassword(PasswordHash newPasswordHash)
+    {
+        PasswordHash = newPasswordHash;
+        Touch();
+        AddDomainEvent(new UserPasswordChanged(Id, this.Email.Value));
     }
 
     public void Activate()

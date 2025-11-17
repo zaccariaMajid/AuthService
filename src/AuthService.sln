@@ -11,10 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Domain", "AuthS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Infrastructure", "AuthService.Infrastructure\AuthService.Infrastructure.csproj", "{11E12B59-2CFE-43E5-9F20-A74006BCBBDD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuldingBlocks", "BuldingBlocks", "{114EFCE6-2865-460F-D8C7-BA811CDD6664}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "BuldingBlocks\Domain\Domain.csproj", "{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,23 +69,8 @@ Global
 		{11E12B59-2CFE-43E5-9F20-A74006BCBBDD}.Release|x64.Build.0 = Release|Any CPU
 		{11E12B59-2CFE-43E5-9F20-A74006BCBBDD}.Release|x86.ActiveCfg = Release|Any CPU
 		{11E12B59-2CFE-43E5-9F20-A74006BCBBDD}.Release|x86.Build.0 = Release|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Debug|x64.Build.0 = Debug|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Debug|x86.Build.0 = Debug|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Release|x64.ActiveCfg = Release|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Release|x64.Build.0 = Release|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Release|x86.ActiveCfg = Release|Any CPU
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{0CE0B9B4-A0F0-460A-BC58-C9398103F8CE} = {114EFCE6-2865-460F-D8C7-BA811CDD6664}
 	EndGlobalSection
 EndGlobal

@@ -34,16 +34,18 @@ public class RegisterUserCommandHandler :
         if(string.IsNullOrWhiteSpace(command.Password))
             return Result<RegisterUserResponse>.Failure(new Error("invalid_password", "Password must be at least 6 characters long."));
 
-        var exists = _userRepository.GetByEmailAsync(command.Email) is null;
+        var exists = await _userRepository.GetByEmailAsync(command.Email) is null;
         if (exists)
             return Result<RegisterUserResponse>.Failure(new Error("user_already_exists", "A user with the given email already exists."));
 
         var salt = _passwordHasher.GenerateSalt();
-        var hashedPassword = _passwordHasher.HashPassword(command.Password, salt);
+        var hash = _passwordHasher.Hash(command.Password, salt);
 
         var email = Email.Create(command.Email);
 
-        var user = User.Create(email, hashedPassword, firstName: command.firstName, lastName: command.lastName);
+        var passwordHash = PasswordHash.Create(hash, salt);
+
+        var user = User.Create(email, passwordHash, firstName: command.firstName, lastName: command.lastName);
 
         await _userRepository.AddAsync(user);
 
