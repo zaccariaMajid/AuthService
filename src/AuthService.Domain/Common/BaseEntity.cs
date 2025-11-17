@@ -8,8 +8,8 @@ namespace src.BuldingBlocks.Domain;
 
 public abstract class BaseEntity<TId>
 {
-    private readonly List<IDomainEvents> _domainEvents = new();
-    public IReadOnlyCollection<IDomainEvents> DomainEvents => _domainEvents.AsReadOnly();
+    private readonly List<IDomainEvent> _domainEvents = new();
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     public TId Id { get; protected set; } = default!;
     public DateTime CreatedAt { get; protected set; }
@@ -21,9 +21,9 @@ public abstract class BaseEntity<TId>
         UpdatedAt = DateTime.UtcNow;
     }
 
-    protected void AddDomainEvent(IDomainEvents domainEvent)
+    protected void AddDomainEvent(IDomainEvent domainEvent)
         => _domainEvents.Add(domainEvent);
-    protected void RemoveDomainEvent(IDomainEvents domainEvent)
+    protected void RemoveDomainEvent(IDomainEvent domainEvent)
         => _domainEvents.Remove(domainEvent);
     protected void ClearDomainEvents()
         => _domainEvents.Clear();

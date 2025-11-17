@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AuthService.Domain.Common;
 
-public interface IDomainEvents
+public interface IDomainEvent
 {
     DateTime OccurredOn { get; }
 }

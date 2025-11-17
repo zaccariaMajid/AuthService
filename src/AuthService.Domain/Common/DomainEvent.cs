@@ -6,7 +6,7 @@ using AuthService.Domain.Common;
 
 namespace AuthService.Domain.Common;
 
-public abstract record DomainEvent : IDomainEvents
+public abstract record DomainEvent : IDomainEvent
 {
     public DateTime OccurredOn { get; init; } = DateTime.UtcNow;
 }
