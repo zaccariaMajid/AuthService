@@ -2,19 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AuthService.Application.Interfaces;
 using AuthService.Application.Interfaces.Repositories;
 using AuthService.Domain.AggregateRoots;
 using AuthService.Domain.Common.Results;
 using AuthService.Domain.Interfaces;
 
-namespace AuthService.Application.Users;
+namespace AuthService.Application.Users.UserLogin;
 
-public record UserLoginCommand(string Email, string Password) : ICommand<Result<UserLoginResponse>>;
-
-public record UserLoginResponse(Guid UserId, string Token, string RefreshToken, string AccessToken);
-
-public class UserLoginCommandHandler : ICommandHandler<UserLoginCommand, Result<UserLoginResponse>>
+public class UserLoginCommandHandler : 
+    ICommandHandler<UserLoginCommand, Result<UserLoginResponse>>
 {
     private readonly IUserRepository _users;
     private readonly IPasswordHasher _hasher;

@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using AuthService.Application.Interfaces;
 using AuthService.Application.Interfaces.Repositories;
 using AuthService.Domain.Common.Results;
 using AuthService.Domain.Interfaces;
 
-namespace AuthService.Application.Users;
-
-public record ChangePasswordCommand(Guid UserId, string CurrentPassword, string NewPassword) : ICommand<Result>;
+namespace AuthService.Application.Users.ChangePassword;
 public class ChangePasswordCommandHandler :
     ICommandHandler<ChangePasswordCommand, Result>
 {

@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AuthService.Application.Interfaces;
 using AuthService.Application.Interfaces.Repositories;
 using AuthService.Domain.Common.Results;
 
-namespace AuthService.Application.Users;
-
-public record AddRoleToUserCommand(Guid UserId, Guid RoleId) : ICommand<Result>;
+namespace AuthService.Application.Users.AddRoleToUser;
 public class AddRoleToUserCommandHandler :
     ICommandHandler<AddRoleToUserCommand, Result>
 {

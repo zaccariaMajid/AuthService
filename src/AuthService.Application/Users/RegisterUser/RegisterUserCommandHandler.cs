@@ -2,18 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AuthService.Application.Interfaces;
 using AuthService.Application.Interfaces.Repositories;
 using AuthService.Domain.AggregateRoots;
 using AuthService.Domain.Common.Results;
 using AuthService.Domain.Interfaces;
 using AuthService.Domain.ValueObjects;
 
-namespace AuthService.Application.Users;
-
-public record RegisterUserResponse(Guid UserId, string Email) : ICommand<Guid>;
-public record RegisterUserCommand(string firstName, string lastName, string Password, string Email) : 
-    ICommand<Result<RegisterUserResponse>>;
+namespace AuthService.Application.Users.RegisterUser;
 
 public class RegisterUserCommandHandler :
     ICommandHandler<RegisterUserCommand, Result<RegisterUserResponse>>

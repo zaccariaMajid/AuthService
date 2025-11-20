@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using AuthService.Application.Interfaces;
 using AuthService.Application.Interfaces.Repositories;
 using AuthService.Domain.Common.Results;
 using AuthService.Domain.Interfaces;
 
-namespace AuthService.Application.Users;
-
-public record RefreshTokenCommand(string RefreshToken) : ICommand<Result<RefreshTokenResponse>>;
-public record RefreshTokenResponse(string AccessToken, string RefreshToken);
+namespace AuthService.Application.Users.RefreshToken;
 public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, Result<RefreshTokenResponse>>
 {
     private readonly IRefreshTokenRepository _refreshTokens;

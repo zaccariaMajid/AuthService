@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AuthService.Application.Interfaces;
 using AuthService.Application.Interfaces.Repositories;
 using AuthService.Domain.Common.Results;
 
-namespace AuthService.Application.Roles;
-
-public record AddPermissionToRoleCommand(Guid RoleId, Guid PermissionId) :
-    ICommand<Result>;
+namespace AuthService.Application.Roles.AddPermissionToRole;
 
 public class AddPermissionToRoleCommandHandler :
     ICommandHandler<AddPermissionToRoleCommand, Result>

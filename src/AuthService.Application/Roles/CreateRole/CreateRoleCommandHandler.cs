@@ -3,17 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AuthService.Application.Interfaces;
 using AuthService.Application.Interfaces.Repositories;
 using AuthService.Domain.AggregateRoots;
 using AuthService.Domain.Common.Results;
 
-namespace AuthService.Application.Roles;
-
-public record CreateRoleCommand(string Name, string Description) :
-    ICommand<Result<CreateRoleResponse>>;
-
-public record CreateRoleResponse(Guid RoleId, string Name);
+namespace AuthService.Application.Roles.CreateRole;
 public class CreateRoleCommandHandler :
     ICommandHandler<CreateRoleCommand, Result<CreateRoleResponse>>
 {

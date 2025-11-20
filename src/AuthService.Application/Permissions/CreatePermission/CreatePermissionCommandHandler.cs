@@ -3,16 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AuthService.Application.Interfaces;
 using AuthService.Application.Interfaces.Repositories;
 using AuthService.Domain.AggregateRoots;
 using AuthService.Domain.Common.Results;
 
-namespace AuthService.Application.Permissions;
-
-public record CreatePermissionCommand(string Name, string Description) : 
-    ICommand<Result<CreatePermissionResponse>>;
-public record CreatePermissionResponse(Guid PermissionId, string Name);
+namespace AuthService.Application.Permissions.CreatePermission;
 
 public class CreatePermissionCommandHandler :
     ICommandHandler<CreatePermissionCommand, Result<CreatePermissionResponse>>
