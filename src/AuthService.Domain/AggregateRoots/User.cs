@@ -71,7 +71,7 @@ public class User : AggregateRoot<Guid>
         {
             IsActive = false;
             Touch();
-            AddDomainEvent(new UserActivated(Id, Email.Value));
+            AddDomainEvent(new UserDeactivated(Id, Email.Value));
         }
     }
 

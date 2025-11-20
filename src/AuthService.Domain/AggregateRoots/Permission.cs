@@ -10,9 +10,10 @@ namespace AuthService.Domain.AggregateRoots;
 
 public sealed class Permission : AggregateRoot<Guid>
 {
-    public string Name { get; private set; }
-    public string Description { get; private set; }
+    public string Name { get; private set; } = null!;
+    public string Description { get; private set; } = null!;
 
+    private Permission() : base() { }
     public Permission(string name, string description) : base()
     {
         Id = Guid.NewGuid();

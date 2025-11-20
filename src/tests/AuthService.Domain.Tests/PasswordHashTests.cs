@@ -22,7 +22,8 @@ public class PasswordHashTests
         var passwordHash = PasswordHash.Create(value, salt);
 
         // Assert
-        Assert.IsNotNull(passwordHash);
+        Assert.IsNotNull(passwordHash.Hash);
+        Assert.IsNotNull(passwordHash.Salt);
     }
 
     [DataTestMethod]
@@ -33,5 +34,20 @@ public class PasswordHashTests
     public void Create_InvalidPasswordHash_ShouldThrow(string pw, string salt)
     {
         PasswordHash.Create(pw, salt);
+    }
+
+    [TestMethod]
+    public void Equals_SamePasswordHash_ShouldReturnTrue()
+    {
+        // Arrange
+        string value = "passwords";
+        string salt = "somesalt";
+
+        // Act
+        var ph1 = PasswordHash.Create(value, salt);
+        var ph2 = PasswordHash.Create(value, salt);
+
+        // Assert
+        Assert.AreEqual(ph1, ph2);
     }
 }
