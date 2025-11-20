@@ -30,10 +30,10 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Restore Dependencies
-        run: dotnet restore
+        run: dotnet restore ./src/AuthService.sln
 
       - name: Build Solution
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build /src/AuthService.sln --no-restore --configuration Release
 
       - name: Run Tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
+        run: dotnet test /src/AuthService.sln --no-build --configuration Release --verbosity normal
