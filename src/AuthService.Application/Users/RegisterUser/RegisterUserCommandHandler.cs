@@ -27,11 +27,11 @@ public class RegisterUserCommandHandler :
     public async Task<Result<RegisterUserResponse>> HandleAsync(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(command.Password))
-            return Result<RegisterUserResponse>.Failure(new Error("invalid_password", "Password must be at least 6 characters long."));
+            return Result<RegisterUserResponse>.Failure(new Error("User.PasswordEmpty", "Password must be at least 6 characters long."));
 
-        var exists = await _userRepository.GetByEmailAsync(command.Email) is null;
+        var exists = await _userRepository.GetByEmailAsync(command.Email) is not null;
         if (exists)
-            return Result<RegisterUserResponse>.Failure(new Error("user_already_exists", "A user with the given email already exists."));
+            return Result<RegisterUserResponse>.Failure(new Error("User.EmailTaken", "A user with the given email already exists."));
 
         var salt = _passwordHasher.GenerateSalt();
         var hash = _passwordHasher.Hash(command.Password, salt);

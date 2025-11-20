@@ -15,6 +15,11 @@ namespace AuthService.Application.Tests;
 [TestClass]
 public class RegisterUserCommandHandlerTests
 {
+    User correctUser = User.Create(
+            Email.Create("newuser@example.com"),
+            PasswordHash.Create("hash", "salt"),
+            "Mario",
+            "Rossi");
     private readonly Mock<IUserRepository> _userRepo = new();
     private readonly Mock<IPasswordHasher> _hasher = new();
 
@@ -23,10 +28,11 @@ public class RegisterUserCommandHandlerTests
     {
         // Arrange
         var command = new RegisterUserCommand(
-            "newuser@example.com",
-            "Password123!",
             "Mario",
-            "Rossi");
+            "Rossi",
+            "Password123!",
+            "newuser@example.com"
+        );
 
         _userRepo.Setup(r => r.GetByEmailAsync(command.Email))
             .ReturnsAsync((User?)null);
@@ -50,19 +56,14 @@ public class RegisterUserCommandHandlerTests
     public async Task Handle_ShouldFail_WhenEmailAlreadyExists()
     {
         var command = new RegisterUserCommand(
-            "existing@example.com",
-            "Password123!",
             "Mario",
-            "Rossi");
-
-        var existing = User.Create(
-            Email.Create(command.Email),
-            PasswordHash.Create("hash", "salt"),
-            "Test",
-            "User");
+            "Rossi",
+            "Password123!",
+            "newuser@example.com"
+        );
 
         _userRepo.Setup(r => r.GetByEmailAsync(command.Email))
-            .ReturnsAsync(existing);
+            .ReturnsAsync(correctUser);
 
         var handler = new RegisterUserCommandHandler(
             _userRepo.Object, _hasher.Object);
