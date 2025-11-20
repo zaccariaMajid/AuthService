@@ -65,6 +65,16 @@ public class User : AggregateRoot<Guid>
         }
     }
 
+    public void Deactivate()
+    {
+        if (IsActive)
+        {
+            IsActive = false;
+            Touch();
+            AddDomainEvent(new UserActivated(Id, Email.Value));
+        }
+    }
+
     public void AssignRole(Role role)
     {
         if (!Roles.Any(r => r.Id == role.Id))
