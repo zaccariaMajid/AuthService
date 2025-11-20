@@ -26,7 +26,7 @@ public class RegisterUserCommandHandler :
 
     public async Task<Result<RegisterUserResponse>> HandleAsync(RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        if(string.IsNullOrWhiteSpace(command.Password))
+        if (string.IsNullOrWhiteSpace(command.Password))
             return Result<RegisterUserResponse>.Failure(new Error("invalid_password", "Password must be at least 6 characters long."));
 
         var exists = await _userRepository.GetByEmailAsync(command.Email) is null;

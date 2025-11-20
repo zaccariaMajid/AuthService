@@ -7,5 +7,5 @@ namespace AuthService.Domain.Interfaces;
 
 public interface IPermissionChecker
 {
-    Task<bool> UserHasPermissionAsync(Guid userId, string permission);   
+    Task<bool> UserHasPermissionAsync(Guid userId, string permission);
 }

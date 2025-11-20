@@ -4,6 +4,6 @@ using AuthService.Domain.Common.Results;
 namespace AuthService.Application.Roles.CreateRole;
 
 public record CreateRoleCommand(
-    string Name, 
+    string Name,
     string Description
 ) : ICommand<Result<CreateRoleResponse>>;

@@ -21,16 +21,16 @@ public class AddRoleToUserCommandHandler :
     public async Task<Result> HandleAsync(AddRoleToUserCommand command, CancellationToken cancellationToken)
     {
         var role = await _roles.GetByIdAsync(command.RoleId);
-        if(role is null)
+        if (role is null)
             return Result.Failure(new Error("Role.NotExists", "No roles found with the given id"));
         var user = await _users.GetByIdAsync(command.UserId);
-        if(user is null)
+        if (user is null)
             return Result.Failure(new Error("User.NotExists", "No user found with the given id"));
 
         user.AssignRole(role);
         await _users.UpdateAsync(user);
 
         return Result.Success();
-        
+
     }
 }

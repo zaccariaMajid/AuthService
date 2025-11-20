@@ -7,7 +7,7 @@ using AuthService.Application.Interfaces;
 
 namespace AuthService.Application;
 
-public interface ICommandHandler<TCommand, TResult> 
+public interface ICommandHandler<TCommand, TResult>
     where TCommand : ICommand<TResult>
 {
     Task<TResult> HandleAsync(TCommand command, CancellationToken cancellationToken);

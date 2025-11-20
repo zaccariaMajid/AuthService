@@ -36,7 +36,7 @@ public class Role : AggregateRoot<Guid>
     {
         if (permission is null)
             throw new ArgumentNullException(nameof(permission));
-        
+
         if (Permissions is not null && !Permissions.Contains(permission))
         {
             Permissions.Add(permission);

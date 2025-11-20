@@ -1,6 +1,6 @@
 namespace AuthService.Application.Roles.CreateRole;
 
 public record CreateRoleResponse(
-    Guid RoleId, 
+    Guid RoleId,
     string Name
 );

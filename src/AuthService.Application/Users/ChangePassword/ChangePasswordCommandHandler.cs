@@ -23,10 +23,10 @@ public class ChangePasswordCommandHandler :
     }
     public async Task<Result> HandleAsync(ChangePasswordCommand command, CancellationToken cancellationToken)
     {
-        var user =  await _users.GetByIdAsync(command.UserId);
+        var user = await _users.GetByIdAsync(command.UserId);
         if (user is null)
             return Result.Failure(new Error("user_not_found", "No user found with the given ID."));
-        
+
         var isCurrentPasswordValid = _hasher.VerifyPassword(user.PasswordHash.Hash, command.CurrentPassword, user.PasswordHash.Salt);
         if (!isCurrentPasswordValid)
             return Result.Failure(new Error("invalid_current_password", "The current password is incorrect."));

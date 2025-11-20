@@ -5,4 +5,4 @@ using System.Threading.Tasks;
 
 namespace AuthService.Application.Interfaces;
 
-public interface IQuery<TResult> {}
+public interface IQuery<TResult> { }

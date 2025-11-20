@@ -64,7 +64,7 @@ public class User : AggregateRoot<Guid>
             AddDomainEvent(new UserActivated(Id, Email.Value));
         }
     }
-    
+
     public void AssignRole(Role role)
     {
         if (!Roles.Any(r => r.Id == role.Id))

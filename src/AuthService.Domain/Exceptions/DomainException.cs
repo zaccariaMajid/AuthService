@@ -10,7 +10,7 @@ public class DomainException : Exception
     public string? Name { get; }
 
     public DomainException(string message)
-        : base(message) {}
+        : base(message) { }
 
     public DomainException(string message, string? name)
         : base(message)
@@ -19,5 +19,5 @@ public class DomainException : Exception
     }
 
     public DomainException(string message, Exception inner)
-        : base(message, inner) {}
+        : base(message, inner) { }
 }

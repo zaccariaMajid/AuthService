@@ -19,11 +19,11 @@ public class CreateRoleCommandHandler :
     }
     public async Task<Result<CreateRoleResponse>> HandleAsync(CreateRoleCommand command, CancellationToken cancellationToken)
     {
-        if(string.IsNullOrWhiteSpace(command.Name))
+        if (string.IsNullOrWhiteSpace(command.Name))
             return Result<CreateRoleResponse>.Failure(new Error("Role.InvalidName", "Role name cannot be empty"));
 
         var exists = await _roles.GetByNameAsync(command.Name) is not null;
-        if(exists)
+        if (exists)
             return Result<CreateRoleResponse>.Failure(new Error("Role.Exists", "A role with this name already exists"));
 
         var role = Role.Create(command.Name, command.Description);

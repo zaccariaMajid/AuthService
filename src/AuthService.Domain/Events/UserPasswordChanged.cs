@@ -6,5 +6,5 @@ using AuthService.Domain.Common;
 
 namespace AuthService.Domain.Events;
 
-public record UserPasswordChanged(Guid UserId, string Email) 
+public record UserPasswordChanged(Guid UserId, string Email)
     : DomainEvent;

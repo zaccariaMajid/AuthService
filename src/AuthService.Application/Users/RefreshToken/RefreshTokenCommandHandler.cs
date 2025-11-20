@@ -29,7 +29,7 @@ public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, R
         if (existingToken is null || existingToken.RevokedAt != null)
             return Result<RefreshTokenResponse>.Failure(new Error("invalid_refresh_token", "The provided refresh token is invalid."));
 
-        if(existingToken.ExpiresAt < DateTime.UtcNow)
+        if (existingToken.ExpiresAt < DateTime.UtcNow)
             return Result<RefreshTokenResponse>.Failure(new Error("expired_refresh_token", "The provided refresh token has expired."));
 
         var user = await _users.GetByIdAsync(existingToken.UserId);

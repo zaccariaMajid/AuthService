@@ -22,11 +22,11 @@ public class AddPermissionToRoleCommandHandler :
     public async Task<Result> HandleAsync(AddPermissionToRoleCommand command, CancellationToken cancellationToken)
     {
         var role = await _roles.GetByIdAsync(command.RoleId);
-        if(role is null)
+        if (role is null)
             return Result.Failure(new Error("Role.NotExists", "No roles found with the given id"));
 
         var permission = await _permissions.GetByIdAsync(command.PermissionId);
-        if(permission is null)
+        if (permission is null)
             return Result.Failure(new Error("Permission.NotExists", "No Permissions found with the given id"));
 
         role.AddPermission(permission);

@@ -20,12 +20,12 @@ public class CreatePermissionCommandHandler :
     }
     public async Task<Result<CreatePermissionResponse>> HandleAsync(CreatePermissionCommand command, CancellationToken cancellationToken)
     {
-        if(string.IsNullOrWhiteSpace(command.Name))
+        if (string.IsNullOrWhiteSpace(command.Name))
             return Result<CreatePermissionResponse>.Failure(new Error("Permission.InvalidName", "Permission name cannot be empty"));
 
         var exists = await _permissions.GetByNameAsync(command.Name) is not null;
 
-        if(exists)
+        if (exists)
             return Result<CreatePermissionResponse>.Failure(new Error("Permission.Exists", "A permission with this name already exists"));
 
         var permission = Permission.Create(command.Name, command.Description);

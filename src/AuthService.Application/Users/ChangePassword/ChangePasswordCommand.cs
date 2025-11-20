@@ -4,7 +4,7 @@ using AuthService.Domain.Common.Results;
 namespace AuthService.Application.Users.ChangePassword;
 
 public record ChangePasswordCommand(
-    Guid UserId, 
-    string CurrentPassword, 
+    Guid UserId,
+    string CurrentPassword,
     string NewPassword
 ) : ICommand<Result>;

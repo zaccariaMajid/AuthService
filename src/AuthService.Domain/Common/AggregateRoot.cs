@@ -8,5 +8,5 @@ namespace AuthService.Domain.Common;
 
 public abstract class AggregateRoot<TId> : BaseEntity<TId>
 {
-    protected AggregateRoot() : base() {}
+    protected AggregateRoot() : base() { }
 }

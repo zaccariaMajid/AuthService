@@ -1,6 +1,6 @@
 namespace AuthService.Application.Users.RefreshToken;
 
 public record RefreshTokenResponse(
-    string AccessToken, 
+    string AccessToken,
     string RefreshToken
 );
