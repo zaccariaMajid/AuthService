@@ -21,12 +21,12 @@ public abstract class BaseEntity<TId>
         UpdatedAt = DateTime.UtcNow;
     }
 
-    protected void AddDomainEvent(IDomainEvent domainEvent)
+    public void AddDomainEvent(IDomainEvent domainEvent)
         => _domainEvents.Add(domainEvent);
-    protected void RemoveDomainEvent(IDomainEvent domainEvent)
+    public void RemoveDomainEvent(IDomainEvent domainEvent)
         => _domainEvents.Remove(domainEvent);
-    protected void ClearDomainEvents()
+    public void ClearDomainEvents()
         => _domainEvents.Clear();
-    protected void Touch()
+    public void Touch()
         => UpdatedAt = DateTime.UtcNow;
 }

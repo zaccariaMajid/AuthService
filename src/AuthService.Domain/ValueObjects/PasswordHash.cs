@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AuthService.Domain.Common;
+using AuthService.Domain.Exceptions;
 
 namespace AuthService.Domain.ValueObjects;
 
@@ -14,9 +15,9 @@ public class PasswordHash : ValueObject
     public PasswordHash(string hash, string salt)
     {
         if (string.IsNullOrWhiteSpace(hash))
-            throw new ArgumentException("Password hash cannot be null or empty.", nameof(hash));
+            throw new DomainException("Password hash cannot be null or empty.", nameof(hash));
         if (string.IsNullOrWhiteSpace(salt))
-            throw new ArgumentException("Salt cannot be null or empty.", nameof(salt));
+            throw new DomainException("Salt cannot be null or empty.", nameof(salt));
 
         Hash = hash;
         Salt = salt;
