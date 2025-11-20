@@ -1,6 +1,5 @@
 name: CI
 
-# triggers after pushes and pull requests to main branch
 on:
   push:
     branches:
@@ -8,27 +7,33 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout Repository
-    uses: actions/checkout@v4
-  - name: Set up .NET 
-    uses: actions/setup-dotnet@v4
-    with:
-      dotnet-version: '9.0.x'
-  - name: Cache NuGet packages
-    uses: actions/cache@v4
-    with:
-      path: ~/.nuget/packages
-      key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-      restore-keys: |
-        ${{ runner.os }}-nuget-
-  - name: Restore Dependencies
-    run: dotnet restore
-  - name: Build Solution
-    run: dotnet build --no-restore --configuration Release
-  - name: Run Tests
-    run: dotnet test --no-build --configuration Release --verbosity normal
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Solution
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run Tests
+        run: dotnet test --no-build --configuration Release --verbosity normal
