@@ -12,11 +12,11 @@ public class Role : AggregateRoot<Guid>
 {
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
-    public ICollection<Permission> Permissions { get; private set; } = new List<Permission>();
+    public ICollection<Permission>? Permissions { get; private set; } = new List<Permission>();
 
     private Role() : base() { }
 
-    private Role(string name, string description, ICollection<Permission> permissions) : base()
+    private Role(string name, string description, ICollection<Permission>? permissions) : base()
     {
         Id = Guid.NewGuid();
         Name = name;
@@ -24,7 +24,7 @@ public class Role : AggregateRoot<Guid>
         Permissions = permissions;
     }
 
-    public static Role Create(string name, string description, ICollection<Permission> permissions)
+    public static Role Create(string name, string description, ICollection<Permission>? permissions = null)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new DomainException("Role name cannot be null or empty.", nameof(name));
@@ -37,7 +37,7 @@ public class Role : AggregateRoot<Guid>
         if (permission is null)
             throw new ArgumentNullException(nameof(permission));
         
-        if (!Permissions.Contains(permission))
+        if (Permissions is not null && !Permissions.Contains(permission))
         {
             Permissions.Add(permission);
             Touch();
@@ -49,7 +49,7 @@ public class Role : AggregateRoot<Guid>
         if (permission is null)
             throw new ArgumentNullException(nameof(permission));
 
-        if (Permissions.Contains(permission))
+        if (Permissions is not null && Permissions.Contains(permission))
         {
             Permissions.Remove(permission);
             Touch();
