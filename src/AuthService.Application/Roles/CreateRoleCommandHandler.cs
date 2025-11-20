@@ -28,7 +28,7 @@ public class CreateRoleCommandHandler :
         if(string.IsNullOrWhiteSpace(command.Name))
             return Result<CreateRoleResponse>.Failure(new Error("Role.InvalidName", "Role name cannot be empty"));
 
-        var exists = _roles.GetByNameAsync(command.Name) is not null;
+        var exists = await _roles.GetByNameAsync(command.Name) is not null;
         if(exists)
             return Result<CreateRoleResponse>.Failure(new Error("Role.Exists", "A role with this name already exists"));
 
