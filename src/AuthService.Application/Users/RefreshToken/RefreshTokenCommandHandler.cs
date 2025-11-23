@@ -27,19 +27,19 @@ public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, R
     {
         var existingToken = await _refreshTokens.GetByTokenAsync(command.RefreshToken);
         if (existingToken is null || existingToken.RevokedAt != null)
-            return Result<RefreshTokenResponse>.Failure(new Error("invalid_refresh_token", "The provided refresh token is invalid."));
+            return Result<RefreshTokenResponse>.Failure(new Error("RefreshToken.InvalidRefreshToken", "The provided refresh token is invalid."));
 
         if (existingToken.ExpiresAt < DateTime.UtcNow)
-            return Result<RefreshTokenResponse>.Failure(new Error("expired_refresh_token", "The provided refresh token has expired."));
+            return Result<RefreshTokenResponse>.Failure(new Error("RefreshToken.InvalidRefreshToken", "The provided refresh token has expired."));
 
         var user = await _users.GetByIdAsync(existingToken.UserId);
         if (user is null)
-            return Result<RefreshTokenResponse>.Failure(new Error("user_not_found", "No user found for the given refresh token."));
+            return Result<RefreshTokenResponse>.Failure(new Error("RefreshToken.UserNotFound", "No user found for the given refresh token."));
 
-        var newAccessToken = _tokenService.GenerateAccessToken(user);
         var newRefreshToken = _tokenService.GenerateRefreshToken(user.Id);
+        var newAccessToken = _tokenService.GenerateAccessToken(user);
 
         return Result<RefreshTokenResponse>.Success(
-            new RefreshTokenResponse(newAccessToken, newRefreshToken.Token));
+            new RefreshTokenResponse(user.Id ,newAccessToken, newRefreshToken.Token));
     }
 }
