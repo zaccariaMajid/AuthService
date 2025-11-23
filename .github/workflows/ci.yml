@@ -36,13 +36,13 @@ jobs:
         run: dotnet build ./src/AuthService.sln --no-restore --configuration Release
         
       - name: Run Domain Tests
-        run: dotnet test ./src/tests/AuthService.Domain.Tests --no-build --configuration Release \
+        run: dotnet test ./src/tests/AuthService.Domain.Tests/AuthService.Domain.Tests.csproj --no-build --configuration Release \
               /p:CollectCoverage=true \
               /p:CoverletOutput=./TestResults/domain/ \
               /p:CoverletOutputFormat=cobertura
 
       - name: Run Application Tests
-        run: dotnet test ./src/tests/AuthService.Application.Tests --no-build --configuration Release \
+        run: dotnet test ./src/tests/AuthService.Application.Tests/AuthService.Application.Tests.csproj --no-build --configuration Release \
               /p:CollectCoverage=true \
               /p:CoverletOutput=./TestResults/application/ \
               /p:CoverletOutputFormat=cobertura
