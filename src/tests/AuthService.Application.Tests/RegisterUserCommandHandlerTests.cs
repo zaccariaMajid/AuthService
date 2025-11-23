@@ -76,4 +76,31 @@ public class RegisterUserCommandHandlerTests
         Assert.AreEqual("User.EmailTaken", result.Error.Code);
         _userRepo.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Never);
     }
+
+    [TestMethod]
+    [DataRow("")]
+    [DataRow("  ")]
+    public async Task Handle_ShouldFail_WhenPasswordIsEmpty(string password)
+    {
+        var command = new RegisterUserCommand(
+            "Mario",
+            "Rossi",
+            password,
+            "newuser@example.com"
+        );
+
+        _userRepo.Setup(r => r.GetByEmailAsync(command.Email))
+            .ReturnsAsync(correctUser);
+
+        var handler = new RegisterUserCommandHandler(
+            _userRepo.Object, _hasher.Object);
+
+        // Act
+        var result = await handler.HandleAsync(command, CancellationToken.None);
+
+        // Assert
+        Assert.IsTrue(result.IsFailure);
+        Assert.AreEqual("User.PasswordEmpty", result.Error.Code);
+        _userRepo.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Never);
+    }
 }
