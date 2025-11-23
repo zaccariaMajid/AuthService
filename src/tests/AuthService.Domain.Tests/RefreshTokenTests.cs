@@ -38,7 +38,7 @@ public class RefreshTokenTests
     }
 
     [TestMethod]
-    public void Revoke_ShouldUpdateAndRaiseEvennt()
+    public void Revoke_ShouldUpdateAndRaiseEvent()
     {
         var refreshToken = RefreshToken.Create(correctUser.Id, "sample_token_value", DateTime.UtcNow.AddDays(7));
         Assert.AreEqual("sample_token_value", refreshToken.Token);
