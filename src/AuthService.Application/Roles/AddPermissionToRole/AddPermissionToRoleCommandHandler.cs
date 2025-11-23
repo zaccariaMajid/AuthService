@@ -23,11 +23,11 @@ public class AddPermissionToRoleCommandHandler :
     {
         var role = await _roles.GetByIdAsync(command.RoleId);
         if (role is null)
-            return Result.Failure(new Error("Role.NotExists", "No roles found with the given id"));
+            return Result.Failure(new Error("Role.NotFound", "No roles found with the given id"));
 
         var permission = await _permissions.GetByIdAsync(command.PermissionId);
         if (permission is null)
-            return Result.Failure(new Error("Permission.NotExists", "No Permissions found with the given id"));
+            return Result.Failure(new Error("Permission.NotFound", "No Permissions found with the given id"));
 
         role.AddPermission(permission);
         await _roles.UpdateAsync(role);
