@@ -131,4 +131,61 @@ public class ChangePasswordCommandHandlerTests
         _userRepo.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
     }
 
+    [TestMethod]
+    [DataRow(null)]
+    [DataRow("")]
+    [DataRow("   ")]
+    public async Task Handle_OldPasswordEmpty_ShouldReturnFailure(string oldPassword)
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var command = new ChangePasswordCommand(
+            userId,
+            oldPassword,
+            "newPassword"
+        );
+
+        var handler = new ChangePasswordCommandHandler(
+            _userRepo.Object,
+            _hasher.Object);
+
+        // Act
+        var result = await handler.HandleAsync(command, CancellationToken.None);
+
+        // Assert
+        Assert.IsTrue(result.IsFailure);
+        Assert.AreEqual("Password.CurrentPasswordEmpty", result.Error.Code);
+
+        _userRepo.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
+    }
+
+
+    [TestMethod]
+    [DataRow(null)]
+    [DataRow("")]
+    [DataRow("   ")]
+    public async Task Handle_NewPasswordEmpty_ShouldReturnFailure(string newPassword)
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var command = new ChangePasswordCommand(
+            userId,
+            "wrong",
+            newPassword
+        );
+
+        var handler = new ChangePasswordCommandHandler(
+            _userRepo.Object,
+            _hasher.Object);
+
+        // Act
+        var result = await handler.HandleAsync(command, CancellationToken.None);
+
+        // Assert
+        Assert.IsTrue(result.IsFailure);
+        Assert.AreEqual("Password.NewPasswordEmpty", result.Error.Code);
+
+        _userRepo.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
+    }
+
 }
