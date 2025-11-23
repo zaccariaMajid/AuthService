@@ -40,7 +40,3 @@ jobs:
           /p:CollectCoverage=true \
           /p:CoverletOutput=./TestResults/coverage/ \
           /p:CoverletOutputFormat=cobertura
-
-
-      - name: Run Tests
-        run: dotnet test ./src/AuthService.sln --no-build --configuration Release --verbosity normal
