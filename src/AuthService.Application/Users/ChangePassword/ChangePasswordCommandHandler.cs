@@ -23,13 +23,22 @@ public class ChangePasswordCommandHandler :
     }
     public async Task<Result> HandleAsync(ChangePasswordCommand command, CancellationToken cancellationToken)
     {
+        if(string.IsNullOrWhiteSpace(command.CurrentPassword))
+        {
+            return Result.Failure(new Error("Password.CurrentPasswordEmpty", "The current password cannot be empty."));
+        }
+        if(string.IsNullOrWhiteSpace(command.NewPassword))
+        {
+            return Result.Failure(new Error("Password.NewPasswordEmpty", "The new password cannot be empty."));
+        }
+        
         var user = await _users.GetByIdAsync(command.UserId);
         if (user is null)
-            return Result.Failure(new Error("user_not_found", "No user found with the given ID."));
+            return Result.Failure(new Error("Password.UserNotFound", "No user found with the given ID."));
 
-        var isCurrentPasswordValid = _hasher.VerifyPassword(user.PasswordHash.Hash, command.CurrentPassword, user.PasswordHash.Salt);
-        if (!isCurrentPasswordValid)
-            return Result.Failure(new Error("invalid_current_password", "The current password is incorrect."));
+        var isOldPasswordValid = _hasher.VerifyPassword(user.PasswordHash.Hash, command.CurrentPassword, user.PasswordHash.Salt);
+        if (!isOldPasswordValid)
+            return Result.Failure(new Error("Password.InvalidOldPassword", "The current password is incorrect."));
 
         var newSalt = _hasher.GenerateSalt();
         var newHash = _hasher.Hash(command.NewPassword, newSalt);
