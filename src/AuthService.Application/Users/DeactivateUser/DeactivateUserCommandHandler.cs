@@ -23,8 +23,8 @@ public class DeactivateUserCommandHandler :
         if (user is null)
             return Result.Failure(new Error("User.NotFound", "User not found"));
 
-        if (user.IsActive)
-            return Result.Failure(new Error("User.AlreadyActive", "User is already active"));
+        if (!user.IsActive)
+            return Result.Failure(new Error("User.AlreadyInactive", "User is already active"));
 
         user.Deactivate();
         await _users.UpdateAsync(user);
