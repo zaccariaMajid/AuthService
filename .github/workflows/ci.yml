@@ -34,9 +34,15 @@ jobs:
 
       - name: Build Solution
         run: dotnet build ./src/AuthService.sln --no-restore --configuration Release
+        
+      - name: Run Domain Tests
+        run: dotnet test ./src/tests/AuthService.Domain.Tests --no-build --configuration Release \
+              /p:CollectCoverage=true \
+              /p:CoverletOutput=./TestResults/domain/ \
+              /p:CoverletOutputFormat=cobertura
 
-      - name: Run Tests with Coverage
-        run: dotnet test ./src/AuthService.sln --no-build --configuration Release --verbosity normal \
-          /p:CollectCoverage=true \
-          /p:CoverletOutput=./TestResults/coverage/ \
-          /p:CoverletOutputFormat=cobertura
+      - name: Run Application Tests
+        run: dotnet test ./src/tests/AuthService.Application.Tests --no-build --configuration Release \
+              /p:CollectCoverage=true \
+              /p:CoverletOutput=./TestResults/application/ \
+              /p:CoverletOutputFormat=cobertura
