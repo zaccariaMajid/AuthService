@@ -40,6 +40,6 @@ public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, R
         var newAccessToken = _tokenService.GenerateAccessToken(user);
 
         return Result<RefreshTokenResponse>.Success(
-            new RefreshTokenResponse(user.Id ,newAccessToken, newRefreshToken.Token));
+            new RefreshTokenResponse(user.Id, newAccessToken, newRefreshToken.Token));
     }
 }

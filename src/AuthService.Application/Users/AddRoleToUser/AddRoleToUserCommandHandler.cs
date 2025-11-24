@@ -23,7 +23,7 @@ public class AddRoleToUserCommandHandler :
         var user = await _users.GetByIdAsync(command.UserId);
         if (user is null)
             return Result.Failure(new Error("User.NotFound", "No user found with the given id"));
-        
+
         var role = await _roles.GetByIdAsync(command.RoleId);
         if (role is null)
             return Result.Failure(new Error("Role.NotFound", "No roles found with the given id"));

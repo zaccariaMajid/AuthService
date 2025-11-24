@@ -23,15 +23,15 @@ public class ChangePasswordCommandHandler :
     }
     public async Task<Result> HandleAsync(ChangePasswordCommand command, CancellationToken cancellationToken)
     {
-        if(string.IsNullOrWhiteSpace(command.CurrentPassword))
+        if (string.IsNullOrWhiteSpace(command.CurrentPassword))
         {
             return Result.Failure(new Error("Password.CurrentPasswordEmpty", "The current password cannot be empty."));
         }
-        if(string.IsNullOrWhiteSpace(command.NewPassword))
+        if (string.IsNullOrWhiteSpace(command.NewPassword))
         {
             return Result.Failure(new Error("Password.NewPasswordEmpty", "The new password cannot be empty."));
         }
-        
+
         var user = await _users.GetByIdAsync(command.UserId);
         if (user is null)
             return Result.Failure(new Error("Password.UserNotFound", "No user found with the given ID."));
