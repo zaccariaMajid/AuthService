@@ -8,7 +8,5 @@ namespace AuthService.Application.Interfaces.Repositories;
 
 public interface IPermissionRepository
 {
-    Task<Permission?> GetByIdAsync(Guid id);
     Task<Permission?> GetByNameAsync(string name);
-    Task AddAsync(Permission permission);
 }
