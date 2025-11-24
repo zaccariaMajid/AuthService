@@ -9,22 +9,19 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AuthService.Infrastructure.Persistence.Configurations;
 
-public class UserConfiguration :  IEntityTypeConfiguration<User>
-    {
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.Email)
-                .HasConversion(e => e.Value, v => Email.Create(v))
-                .IsRequired();
-
-            builder.OwnsMany(x => x.Roles);
-
-            builder.Property(x => x.IsActive)
-                .IsRequired();
-        }
-    }
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    
+    public void Configure(EntityTypeBuilder<User> builder)
+    {
+        builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.Email)
+            .HasConversion(e => e.Value, v => Email.Create(v))
+            .IsRequired();
+
+        builder.OwnsMany(x => x.Roles);
+
+        builder.Property(x => x.IsActive)
+            .IsRequired();
+    }
 }
