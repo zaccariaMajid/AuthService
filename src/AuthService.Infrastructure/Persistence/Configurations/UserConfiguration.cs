@@ -13,15 +13,47 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(u => u.Id);
 
-        builder.Property(x => x.Email)
-            .HasConversion(e => e.Value, v => Email.Create(v))
+        // Email as ValueObject
+        builder.Property(u => u.Email)
+            .HasConversion(
+                v => v.Value,
+                v => Email.Create(v))
             .IsRequired();
 
-        builder.OwnsMany(x => x.Roles);
+        // PasswordHash as ValueObject
+        builder.OwnsOne(u => u.PasswordHash, ph =>
+        {
+            ph.Property(p => p.Hash).HasColumnName("PasswordHash");
+            ph.Property(p => p.Salt).HasColumnName("PasswordSalt");
+        });
 
-        builder.Property(x => x.IsActive)
+        builder.Property(u => u.FirstName)
             .IsRequired();
+
+        builder.Property(u => u.LastName)
+            .IsRequired();
+
+        builder.Property(u => u.IsActive)
+            .IsRequired();
+
+        builder.Property(u => u.CreatedAt)
+            .IsRequired();
+
+        builder.Property(u => u.UpdatedAt)
+            .IsRequired();
+
+        // Roles
+        builder.OwnsMany(u => u.Roles, role =>
+        {
+            role.WithOwner().HasForeignKey("UserId");
+            role.Property<Guid>("Id");
+            role.HasKey("Id");
+
+            role.Property(r => r.Name)
+                .HasColumnName("RoleName")
+                .IsRequired();
+        });
     }
 }
