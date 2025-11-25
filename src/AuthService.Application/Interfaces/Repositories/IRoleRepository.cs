@@ -6,7 +6,7 @@ using AuthService.Domain.AggregateRoots;
 
 namespace AuthService.Application.Interfaces.Repositories;
 
-public interface IRoleRepository
+public interface IRoleRepository : IEfRepository<Role>
 {
     Task<Role?> GetByNameAsync(string name);
 }

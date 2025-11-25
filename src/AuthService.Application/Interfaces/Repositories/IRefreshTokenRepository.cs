@@ -6,7 +6,7 @@ using AuthService.Domain.AggregateRoots;
 
 namespace AuthService.Application.Interfaces.Repositories;
 
-public interface IRefreshTokenRepository
+public interface IRefreshTokenRepository : IEfRepository<RefreshToken>
 {
     Task<RefreshToken?> GetByTokenAsync(string token);
 }

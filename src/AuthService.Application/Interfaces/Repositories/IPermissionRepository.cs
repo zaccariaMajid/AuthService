@@ -6,7 +6,7 @@ using AuthService.Domain.AggregateRoots;
 
 namespace AuthService.Application.Interfaces.Repositories;
 
-public interface IPermissionRepository
+public interface IPermissionRepository : IEfRepository<Permission>
 {
     Task<Permission?> GetByNameAsync(string name);
 }

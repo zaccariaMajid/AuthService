@@ -6,7 +6,7 @@ using AuthService.Domain.AggregateRoots;
 
 namespace AuthService.Application.Interfaces.Repositories;
 
-public interface IUserRepository
+public interface IUserRepository : IEfRepository<User>
 {
     Task<User?> GetByEmailAsync(string email);
 }
