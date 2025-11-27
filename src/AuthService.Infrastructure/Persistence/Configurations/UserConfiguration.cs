@@ -45,15 +45,22 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         // Roles
-        builder.OwnsMany(u => u.Roles, role =>
-        {
-            role.WithOwner().HasForeignKey("UserId");
-            role.Property<Guid>("Id");
-            role.HasKey("Id");
-
-            role.Property(r => r.Name)
-                .HasColumnName("RoleName")
-                .IsRequired();
-        });
+        builder.HasMany(u => u.Roles)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+                "UserRoles",
+                right => right.HasOne<Role>()
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                left => left.HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                join =>
+                {
+                    join.HasKey("UserId", "RoleId");
+                    join.ToTable("UserRoles");
+                });
     }
 }

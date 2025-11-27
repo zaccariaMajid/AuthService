@@ -19,18 +19,22 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         builder.Property(r => r.Description);
 
-        builder.OwnsMany(r => r.Permissions, perm =>
-        {
-            perm.WithOwner().HasForeignKey("RoleId");
-            perm.Property<Guid>("Id");
-            perm.HasKey("Id");
-            
-            perm.Property(p => p.Name)
-                .HasColumnName("PermissionName")
-                .IsRequired();
-
-            perm.Property(p => p.Description)
-                .HasColumnName("PermissionDescription");
-        });
+        builder.HasMany(r => r.Permissions)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+                "RolePermissions",
+                right => right.HasOne<Permission>()
+                    .WithMany()
+                    .HasForeignKey("PermissionId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                left => left.HasOne<Role>()
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                join =>
+                {
+                    join.HasKey("RoleId", "PermissionId");
+                    join.ToTable("RolePermissions");
+                });
     }
 }

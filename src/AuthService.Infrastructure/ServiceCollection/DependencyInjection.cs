@@ -20,7 +20,9 @@ public static class DependencyInjection
             this IServiceCollection services,
             IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("AuthDatabase");
+        var connectionString = configuration.GetConnectionString("ConnectionString") 
+            ?? configuration["ConnectionString"]
+            ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
         services.AddDbContext<AuthDbContext>(options =>
             options.UseNpgsql(connectionString));
 
@@ -29,15 +31,11 @@ public static class DependencyInjection
         services.AddScoped<IPermissionRepository, PermissionRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
-        // Bind JwtSettings using the Options pattern
-        services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
-        services.AddOptions<JwtSettings>()
-            .Bind(configuration.GetSection("Jwt"));
-
-        
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<ITokenService, JwtTokenService>();
-
+        
+        // Bind JwtSettings using the Options pattern
+        services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 
         return services;
     }
