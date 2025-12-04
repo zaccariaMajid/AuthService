@@ -14,25 +14,30 @@ public class Role : AggregateRoot<Guid>
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public ICollection<Permission>? Permissions { get; private set; } = new List<Permission>();
+    public Guid TenantId { get; private set; }
 
     private Role() : base() { }
 
-    private Role(string name, string description, ICollection<Permission>? permissions) : base()
+    private Role(string name, string description, ICollection<Permission>? permissions, Guid tenantId) : base()
     {
         Id = Guid.NewGuid();
         Name = name;
         Description = description ?? string.Empty;
         Permissions = permissions;
+        TenantId = tenantId;
 
         AddDomainEvent(new RoleCreated(Id, name));
     }
 
-    public static Role Create(string name, string description, ICollection<Permission>? permissions = null)
+    public static Role Create(string name, string description, ICollection<Permission>? permissions = null, Guid tenantId = default)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new DomainException("Role name cannot be null or empty.", nameof(name));
 
-        return new Role(name, description, permissions);
+        if (tenantId == Guid.Empty)
+            throw new DomainException("Tenant is required for role.", nameof(tenantId));
+
+        return new Role(name, description, permissions, tenantId);
     }
 
     public void AddPermission(Permission permission)

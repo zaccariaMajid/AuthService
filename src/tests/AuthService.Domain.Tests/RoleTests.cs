@@ -11,13 +11,19 @@ namespace AuthService.Domain.Tests;
 [TestClass]
 public class RoleTests
 {
-    Role correctRole = Role.Create("Admin", "Administrator role");
+    private readonly Guid _tenantId = Guid.NewGuid();
+    Role correctRole;
     Permission permission = Permission.Create("Read", "Read permission");
+
+    public RoleTests()
+    {
+        correctRole = Role.Create("Admin", "Administrator role", tenantId: _tenantId);
+    }
 
     [TestMethod]
     public void CreateRole_ShouldSetDataAndRaiseEvent()
     {
-        var role = Role.Create("Admin", "Administrator role");
+        var role = Role.Create("Admin", "Administrator role", tenantId: _tenantId);
 
         Assert.AreEqual("Admin", role.Name);
         Assert.AreEqual("Administrator role", role.Description);
@@ -30,7 +36,7 @@ public class RoleTests
     [ExpectedException(typeof(DomainException))]
     public void CreateRole_InvalidName_ShouldThrow(string name, string description)
     {
-        Role.Create(name, description);
+        Role.Create(name, description, tenantId: _tenantId);
     }
 
     [TestMethod]

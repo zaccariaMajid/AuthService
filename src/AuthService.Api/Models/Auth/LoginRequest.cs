@@ -4,4 +4,5 @@ namespace AuthService.Api.Models.Auth;
 
 public record LoginRequest(
     [property: Required, EmailAddress] string Email,
-    [property: Required] string Password);
+    [property: Required] string Password,
+    [property: Required] Guid TenantId);

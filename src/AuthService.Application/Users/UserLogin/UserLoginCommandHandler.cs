@@ -15,15 +15,18 @@ public class UserLoginCommandHandler :
     private readonly IUserRepository _users;
     private readonly IPasswordHasher _hasher;
     private readonly ITokenService _tokenService;
+    private readonly ITenantRepository _tenants;
 
     public UserLoginCommandHandler(
         IUserRepository users,
         IPasswordHasher hasher,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        ITenantRepository tenants)
     {
         _users = users;
         _hasher = hasher;
         _tokenService = tokenService;
+        _tenants = tenants;
     }
 
     public async Task<Result<UserLoginResponse>> HandleAsync(UserLoginCommand command, CancellationToken cancellationToken)
@@ -35,7 +38,14 @@ public class UserLoginCommandHandler :
             return Result<UserLoginResponse>.Failure(new Error("User.InvalidPassword", "Password cannot be empty."));
 
 
-        var user = await _users.GetByEmailAsync(command.Email);
+        if (command.TenantId == Guid.Empty)
+            return Result<UserLoginResponse>.Failure(new Error("User.InvalidTenant", "Tenant is required."));
+
+        var tenant = await _tenants.GetByIdAsync(command.TenantId);
+        if (tenant is null || !tenant.IsActive)
+            return Result<UserLoginResponse>.Failure(new Error("User.TenantUnavailable", "Tenant not found or inactive."));
+
+        var user = await _users.GetByEmailAsync(command.Email, command.TenantId);
 
         if (user is null)
             return Result<UserLoginResponse>.Failure(new Error("User.NotFound", "No user found with the given email."));

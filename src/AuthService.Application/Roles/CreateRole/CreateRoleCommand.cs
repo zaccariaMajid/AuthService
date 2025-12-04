@@ -5,5 +5,6 @@ namespace AuthService.Application.Roles.CreateRole;
 
 public record CreateRoleCommand(
     string Name,
-    string Description
+    string Description,
+    Guid TenantId
 ) : ICommand<Result<CreateRoleResponse>>;

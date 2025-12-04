@@ -40,7 +40,7 @@ public class AuthController : ApiControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserRequest request, CancellationToken cancellationToken)
     {
-        var command = new RegisterUserCommand(request.FirstName, request.LastName, request.Password, request.Email);
+        var command = new RegisterUserCommand(request.FirstName, request.LastName, request.Password, request.Email, request.TenantId);
         var result = await _registerHandler.HandleAsync(command, cancellationToken);
         return ToActionResult(result);
     }
@@ -48,7 +48,7 @@ public class AuthController : ApiControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        var command = new UserLoginCommand(request.Email, request.Password);
+        var command = new UserLoginCommand(request.Email, request.Password, request.TenantId);
         var result = await _loginHandler.HandleAsync(command, cancellationToken);
         return ToActionResult(result);
     }

@@ -8,5 +8,5 @@ namespace AuthService.Application.Interfaces.Repositories;
 
 public interface IRoleRepository : IEfRepository<Role>
 {
-    Task<Role?> GetByNameAsync(string name);
+    Task<Role?> GetByNameAsync(string name, Guid tenantId);
 }

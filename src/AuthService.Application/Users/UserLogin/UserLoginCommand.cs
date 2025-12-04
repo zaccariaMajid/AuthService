@@ -5,5 +5,6 @@ namespace AuthService.Application.Users.UserLogin;
 
 public record UserLoginCommand(
     string Email,
-    string Password
+    string Password,
+    Guid TenantId
 ) : ICommand<Result<UserLoginResponse>>;

@@ -1,6 +1,9 @@
 using AuthService.Application.Permissions.CreatePermission;
 using AuthService.Application.Roles.AddPermissionToRole;
 using AuthService.Application.Roles.CreateRole;
+using AuthService.Application.Tenants.ActivateTenant;
+using AuthService.Application.Tenants.CreateTenant;
+using AuthService.Application.Tenants.DeactivateTenant;
 using AuthService.Application.Users.ActivateUser;
 using AuthService.Application.Users.AddRoleToUser;
 using AuthService.Application.Users.ChangePassword;
@@ -27,6 +30,9 @@ public static class DependencyInjection
         services.AddScoped<ICommandHandler<CreateRoleCommand, Result<CreateRoleResponse>>, CreateRoleCommandHandler>();
         services.AddScoped<ICommandHandler<AddPermissionToRoleCommand, Result>, AddPermissionToRoleCommandHandler>();
         services.AddScoped<ICommandHandler<CreatePermissionCommand, Result<CreatePermissionResponse>>, CreatePermissionCommandHandler>();
+        services.AddScoped<ICommandHandler<CreateTenantCommand, Result<CreateTenantResponse>>, CreateTenantCommandHandler>();
+        services.AddScoped<ICommandHandler<ActivateTenantCommand, Result>, ActivateTenantCommandHandler>();
+        services.AddScoped<ICommandHandler<DeactivateTenantCommand, Result>, DeactivateTenantCommandHandler>();
 
         return services;
     }

@@ -14,7 +14,8 @@ public class UserRepository : EfRepository<User>, IUserRepository
     {
     }
 
-    public async Task<User?> GetByEmailAsync(string email)
-        => await _db.Users.FirstOrDefaultAsync(u => u.Email.Value == email);
+    public async Task<User?> GetByEmailAsync(string email, Guid tenantId)
+        => await _db.Users
+            .FirstOrDefaultAsync(u => u.Email.Value == email && u.TenantId == tenantId);
 
 }

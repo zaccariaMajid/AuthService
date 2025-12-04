@@ -17,12 +17,13 @@ public class User : AggregateRoot<Guid>
     public string FirstName { get; private set; } = null!;
     public string LastName { get; private set; } = null!;
     public bool IsActive { get; private set; }
+    public Guid TenantId { get; private set; }
 
     public List<Role> Roles { get; private set; } = new();
 
     private User() { }
 
-    private User(Email email, PasswordHash passwordHash, string firstName, string lastName)
+    private User(Email email, PasswordHash passwordHash, string firstName, string lastName, Guid tenantId)
     {
         Id = Guid.NewGuid();
         Email = email;
@@ -30,6 +31,7 @@ public class User : AggregateRoot<Guid>
         FirstName = firstName;
         LastName = lastName;
         IsActive = false;
+        TenantId = tenantId;
 
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = CreatedAt;
@@ -37,7 +39,7 @@ public class User : AggregateRoot<Guid>
         AddDomainEvent(new UserRegistered(Id, Email.Value));
     }
 
-    public static User Create(Email email, PasswordHash passwordHash, string firstName, string lastName)
+    public static User Create(Email email, PasswordHash passwordHash, string firstName, string lastName, Guid tenantId)
     {
         if (string.IsNullOrWhiteSpace(firstName))
             throw new DomainException("First name cannot be empty.");
@@ -45,7 +47,10 @@ public class User : AggregateRoot<Guid>
         if (string.IsNullOrWhiteSpace(lastName))
             throw new DomainException("Last name cannot be empty.");
 
-        return new User(email, passwordHash, firstName, lastName);
+        if (tenantId == Guid.Empty)
+            throw new DomainException("Tenant is required for user.", nameof(tenantId));
+
+        return new User(email, passwordHash, firstName, lastName, tenantId);
     }
 
     public void ChangePassword(PasswordHash newPasswordHash)

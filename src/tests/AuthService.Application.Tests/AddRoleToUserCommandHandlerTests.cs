@@ -14,6 +14,7 @@ namespace AuthService.Application.Tests;
 [TestClass]
 public class AddRoleToUserCommandHandlerTests
 {
+    private readonly Guid _tenantId = Guid.NewGuid();
     private readonly Mock<IUserRepository> _userRepo = new();
     private readonly Mock<IRoleRepository> _roleRepo = new();
 
@@ -28,9 +29,10 @@ public class AddRoleToUserCommandHandlerTests
             Email.Create("user@example.com"),
             PasswordHash.Create("hash", "salt"),
             "Mario",
-            "Rossi");
+            "Rossi",
+            _tenantId);
 
-        var role = Role.Create("Admin", "Administrator role");
+        var role = Role.Create("Admin", "Administrator role", tenantId: _tenantId);
 
         _userRepo.Setup(r => r.GetByIdAsync(userId))
             .ReturnsAsync(user);
@@ -90,7 +92,8 @@ public class AddRoleToUserCommandHandlerTests
             Email.Create("user@example.com"),
             PasswordHash.Create("hash", "salt"),
             "Mario",
-            "Rossi");
+            "Rossi",
+            _tenantId);
 
         _userRepo.Setup(r => r.GetByIdAsync(userId))
             .ReturnsAsync(user);

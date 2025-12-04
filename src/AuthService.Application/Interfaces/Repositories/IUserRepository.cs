@@ -8,5 +8,5 @@ namespace AuthService.Application.Interfaces.Repositories;
 
 public interface IUserRepository : IEfRepository<User>
 {
-    Task<User?> GetByEmailAsync(string email);
+    Task<User?> GetByEmailAsync(string email, Guid tenantId);
 }

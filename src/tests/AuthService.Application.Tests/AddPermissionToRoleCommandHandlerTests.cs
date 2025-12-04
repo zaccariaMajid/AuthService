@@ -13,6 +13,7 @@ namespace AuthService.Application.Tests;
 [TestClass]
 public class AddPermissionToRoleCommandHandlerTests
 {
+    private readonly Guid _tenantId = Guid.NewGuid();
     private readonly Mock<IRoleRepository> _roleRepo = new();
     private readonly Mock<IPermissionRepository> _permissionRepo = new();
 
@@ -23,7 +24,7 @@ public class AddPermissionToRoleCommandHandlerTests
         var roleId = Guid.NewGuid();
         var permissionId = Guid.NewGuid();
 
-        var role = Role.Create("Manager", "Manager role");
+        var role = Role.Create("Manager", "Manager role", tenantId: _tenantId);
         var permission = Permission.Create("EditUsers", "Allows editing users");
 
         _roleRepo.Setup(r => r.GetByIdAsync(roleId))
@@ -80,7 +81,7 @@ public class AddPermissionToRoleCommandHandlerTests
             var roleId = Guid.NewGuid();
             var permissionId = Guid.NewGuid();
 
-            var role = Role.Create("Manager", "Manager role");
+            var role = Role.Create("Manager", "Manager role", tenantId: _tenantId);
 
             _roleRepo.Setup(r => r.GetByIdAsync(roleId))
                 .ReturnsAsync(role);

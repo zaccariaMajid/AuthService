@@ -14,7 +14,7 @@ public class RoleRepository : EfRepository<Role>, IRoleRepository
     {
     }
 
-    public async Task<Role?> GetByNameAsync(string name)
-        => await _db.Roles.FirstOrDefaultAsync(u => u.Name == name);
+    public async Task<Role?> GetByNameAsync(string name, Guid tenantId)
+        => await _db.Roles.FirstOrDefaultAsync(u => u.Name == name && u.TenantId == tenantId);
 
 }

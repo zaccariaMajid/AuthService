@@ -7,5 +7,6 @@ public record RegisterUserCommand(
     string firstName,
     string lastName,
     string Password,
-    string Email
+    string Email,
+    Guid TenantId
 ) : ICommand<Result<RegisterUserResponse>>;

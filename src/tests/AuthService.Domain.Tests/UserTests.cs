@@ -12,12 +12,20 @@ namespace AuthService.Domain.Tests;
 [TestClass]
 public class UserTests
 {
-    User correctUser = User.Create(
+    private readonly Guid _tenantId = Guid.NewGuid();
+    User correctUser;
+    Role role;
+
+    public UserTests()
+    {
+        correctUser = User.Create(
             Email.Create("user@example.com"),
             PasswordHash.Create("hash", "salt"),
             "Mario",
-            "Rossi");
-    Role role = Role.Create("Admin", "Administrator role");
+            "Rossi",
+            _tenantId);
+        role = Role.Create("Admin", "Administrator role", tenantId: _tenantId);
+    }
     
     [TestMethod]
     public void CreateUser_ShouldSetDataAndRaiseEvent()
@@ -25,7 +33,7 @@ public class UserTests
         var email = Email.Create("user@example.com");
         var password = PasswordHash.Create("hash", "salt");
 
-        var user = User.Create(email, password, "Mario", "Rossi");
+        var user = User.Create(email, password, "Mario", "Rossi", _tenantId);
 
         Assert.AreEqual(email, user.Email);
         Assert.AreEqual("Mario", user.FirstName);
@@ -44,7 +52,7 @@ public class UserTests
         var email = Email.Create("user@example.com");
         var password = PasswordHash.Create("hash", "salt");
 
-        User.Create(email, password, firstName, lastName);
+        User.Create(email, password, firstName, lastName, _tenantId);
     }
 
     [TestMethod]

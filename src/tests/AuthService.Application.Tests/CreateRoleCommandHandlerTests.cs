@@ -14,17 +14,21 @@ namespace AuthService.Application.Tests;
 public class CreateRoleCommandHandlerTests
 {
     private readonly Mock<IRoleRepository> _roleRepo = new();
+    private readonly Mock<ITenantRepository> _tenants = new();
 
     [TestMethod]
     public async Task Handle_ValidRoleName_ShouldReturnSuccess()
     {
         // Arrange
-        var command = new CreateRoleCommand("Admin", "Administrator role");
+        var tenantId = Guid.NewGuid();
+        var command = new CreateRoleCommand("Admin", "Administrator role", tenantId);
 
-        _roleRepo.Setup(r => r.GetByNameAsync(command.Name))
+        _tenants.Setup(t => t.GetByIdAsync(tenantId)).ReturnsAsync(Tenant.Create("Tenant A"));
+
+        _roleRepo.Setup(r => r.GetByNameAsync(command.Name, tenantId))
             .ReturnsAsync((Role?)null);
 
-        var handler = new CreateRoleCommandHandler(_roleRepo.Object);
+        var handler = new CreateRoleCommandHandler(_roleRepo.Object, _tenants.Object);
 
         // Act
         var result = await handler.HandleAsync(command, CancellationToken.None);
@@ -42,9 +46,11 @@ public class CreateRoleCommandHandlerTests
     public async Task Handle_EmptyRoleName_ShouldReturnFailure(string roleName)
     {
         // Arrange
-        var command = new CreateRoleCommand(roleName, "Some description");
+        var command = new CreateRoleCommand(roleName, "Some description", Guid.NewGuid());
 
-        var handler = new CreateRoleCommandHandler(_roleRepo.Object);
+        _tenants.Setup(t => t.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(Tenant.Create("Tenant A"));
+
+        var handler = new CreateRoleCommandHandler(_roleRepo.Object, _tenants.Object);
 
         // Act
         var result = await handler.HandleAsync(command, CancellationToken.None);
@@ -60,14 +66,17 @@ public class CreateRoleCommandHandlerTests
     public async Task Handle_RoleAlreadyExists_ShouldReturnFailure()
     {
         // Arrange
-        var command = new CreateRoleCommand("Admin", "Administrator role");
+        var tenantId = Guid.NewGuid();
+        var command = new CreateRoleCommand("Admin", "Administrator role", tenantId);
 
-        var existingRole = Role.Create("Admin", "Administrator role");
+        var existingRole = Role.Create("Admin", "Administrator role", tenantId: tenantId);
 
-        _roleRepo.Setup(r => r.GetByNameAsync(command.Name))
+        _tenants.Setup(t => t.GetByIdAsync(tenantId)).ReturnsAsync(Tenant.Create("Tenant A"));
+
+        _roleRepo.Setup(r => r.GetByNameAsync(command.Name, tenantId))
             .ReturnsAsync(existingRole);
 
-        var handler = new CreateRoleCommandHandler(_roleRepo.Object);
+        var handler = new CreateRoleCommandHandler(_roleRepo.Object, _tenants.Object);
 
         // Act
         var result = await handler.HandleAsync(command, CancellationToken.None);

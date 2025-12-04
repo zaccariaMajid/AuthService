@@ -38,6 +38,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.IsActive)
             .IsRequired();
 
+        builder.Property(u => u.TenantId)
+            .IsRequired();
+        builder.HasIndex(u => new { u.Email, u.TenantId }).IsUnique();
+
+        builder.HasOne<Tenant>()
+            .WithMany()
+            .HasForeignKey(u => u.TenantId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.Property(u => u.CreatedAt)
             .IsRequired();
 

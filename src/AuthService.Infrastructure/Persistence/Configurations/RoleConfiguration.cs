@@ -19,6 +19,14 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         builder.Property(r => r.Description);
 
+        builder.Property(r => r.TenantId)
+            .IsRequired();
+        builder.HasIndex(r => new { r.Name, r.TenantId }).IsUnique();
+        builder.HasOne<Tenant>()
+            .WithMany()
+            .HasForeignKey(r => r.TenantId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasMany(r => r.Permissions)
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(

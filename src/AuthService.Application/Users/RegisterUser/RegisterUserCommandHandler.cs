@@ -15,13 +15,16 @@ public class RegisterUserCommandHandler :
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly ITenantRepository _tenants;
 
     public RegisterUserCommandHandler(
         IUserRepository userRepository,
-        IPasswordHasher passwordHasher)
+        IPasswordHasher passwordHasher,
+        ITenantRepository tenants)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
+        _tenants = tenants;
     }
 
     public async Task<Result<RegisterUserResponse>> HandleAsync(RegisterUserCommand command, CancellationToken cancellationToken)
@@ -29,7 +32,14 @@ public class RegisterUserCommandHandler :
         if (string.IsNullOrWhiteSpace(command.Password))
             return Result<RegisterUserResponse>.Failure(new Error("User.PasswordEmpty", "Password must be at least 6 characters long."));
 
-        var exists = await _userRepository.GetByEmailAsync(command.Email) is not null;
+        if (command.TenantId == Guid.Empty)
+            return Result<RegisterUserResponse>.Failure(new Error("User.InvalidTenant", "Tenant is required."));
+
+        var tenant = await _tenants.GetByIdAsync(command.TenantId);
+        if (tenant is null || !tenant.IsActive)
+            return Result<RegisterUserResponse>.Failure(new Error("User.TenantUnavailable", "Tenant not found or inactive."));
+
+        var exists = await _userRepository.GetByEmailAsync(command.Email, command.TenantId) is not null;
         if (exists)
             return Result<RegisterUserResponse>.Failure(new Error("User.EmailTaken", "A user with the given email already exists."));
 
@@ -40,7 +50,7 @@ public class RegisterUserCommandHandler :
 
         var passwordHash = PasswordHash.Create(hash, salt);
 
-        var user = User.Create(email, passwordHash, firstName: command.firstName, lastName: command.lastName);
+        var user = User.Create(email, passwordHash, firstName: command.firstName, lastName: command.lastName, tenantId: command.TenantId);
 
         await _userRepository.AddAsync(user);
 

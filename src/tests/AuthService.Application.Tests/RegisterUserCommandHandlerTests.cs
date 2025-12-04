@@ -19,29 +19,36 @@ public class RegisterUserCommandHandlerTests
             Email.Create("newuser@example.com"),
             PasswordHash.Create("hash", "salt"),
             "Mario",
-            "Rossi");
+            "Rossi",
+            Guid.NewGuid());
     private readonly Mock<IUserRepository> _userRepo = new();
     private readonly Mock<IPasswordHasher> _hasher = new();
+    private readonly Mock<ITenantRepository> _tenants = new();
 
     [TestMethod]
     public async Task Handle_ShouldCreateUser_WhenEmailNotExists()
     {
+        var tenantId = Guid.NewGuid();
         // Arrange
         var command = new RegisterUserCommand(
             "Mario",
             "Rossi",
             "Password123!",
-            "newuser@example.com"
+            "newuser@example.com",
+            tenantId
         );
 
-        _userRepo.Setup(r => r.GetByEmailAsync(command.Email))
+        _tenants.Setup(t => t.GetByIdAsync(tenantId))
+            .ReturnsAsync(Tenant.Create("Tenant A"));
+
+        _userRepo.Setup(r => r.GetByEmailAsync(command.Email, tenantId))
             .ReturnsAsync((User?)null);
 
         _hasher.Setup(h => h.GenerateSalt()).Returns("salt");
         _hasher.Setup(h => h.Hash(command.Password, "salt")).Returns("hash");
 
         var handler = new RegisterUserCommandHandler(
-            _userRepo.Object, _hasher.Object);
+            _userRepo.Object, _hasher.Object, _tenants.Object);
 
         // Act
         var result = await handler.HandleAsync(command, CancellationToken.None);
@@ -55,18 +62,23 @@ public class RegisterUserCommandHandlerTests
     [TestMethod]
     public async Task Handle_ShouldFail_WhenEmailAlreadyExists()
     {
+        var tenantId = Guid.NewGuid();
         var command = new RegisterUserCommand(
             "Mario",
             "Rossi",
             "Password123!",
-            "newuser@example.com"
+            "newuser@example.com",
+            tenantId
         );
 
-        _userRepo.Setup(r => r.GetByEmailAsync(command.Email))
+        _tenants.Setup(t => t.GetByIdAsync(tenantId))
+            .ReturnsAsync(Tenant.Create("Tenant A"));
+
+        _userRepo.Setup(r => r.GetByEmailAsync(command.Email, tenantId))
             .ReturnsAsync(correctUser);
 
         var handler = new RegisterUserCommandHandler(
-            _userRepo.Object, _hasher.Object);
+            _userRepo.Object, _hasher.Object, _tenants.Object);
 
         // Act
         var result = await handler.HandleAsync(command, CancellationToken.None);
@@ -82,18 +94,23 @@ public class RegisterUserCommandHandlerTests
     [DataRow("  ")]
     public async Task Handle_ShouldFail_WhenPasswordIsEmpty(string password)
     {
+        var tenantId = Guid.NewGuid();
         var command = new RegisterUserCommand(
             "Mario",
             "Rossi",
             password,
-            "newuser@example.com"
+            "newuser@example.com",
+            tenantId
         );
 
-        _userRepo.Setup(r => r.GetByEmailAsync(command.Email))
+        _tenants.Setup(t => t.GetByIdAsync(tenantId))
+            .ReturnsAsync(Tenant.Create("Tenant A"));
+
+        _userRepo.Setup(r => r.GetByEmailAsync(command.Email, tenantId))
             .ReturnsAsync(correctUser);
 
         var handler = new RegisterUserCommandHandler(
-            _userRepo.Object, _hasher.Object);
+            _userRepo.Object, _hasher.Object, _tenants.Object);
 
         // Act
         var result = await handler.HandleAsync(command, CancellationToken.None);

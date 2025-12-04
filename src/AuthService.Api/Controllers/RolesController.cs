@@ -24,7 +24,7 @@ public class RolesController : ApiControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateRoleRequest request, CancellationToken cancellationToken)
     {
-        var command = new CreateRoleCommand(request.Name, request.Description ?? string.Empty);
+        var command = new CreateRoleCommand(request.Name, request.Description ?? string.Empty, request.TenantId);
         var result = await _createRoleHandler.HandleAsync(command, cancellationToken);
         return ToActionResult(result);
     }

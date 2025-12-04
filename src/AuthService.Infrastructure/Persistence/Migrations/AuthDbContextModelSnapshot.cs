@@ -96,12 +96,50 @@ namespace AuthService.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name", "TenantId")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId");
+
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("AuthService.Domain.AggregateRoots.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tenants");
                 });
 
             modelBuilder.Entity("AuthService.Domain.AggregateRoots.User", b =>
@@ -128,10 +166,18 @@ namespace AuthService.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email", "TenantId")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Users");
                 });
@@ -166,6 +212,15 @@ namespace AuthService.Infrastructure.Persistence.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("AuthService.Domain.AggregateRoots.Role", b =>
+                {
+                    b.HasOne("AuthService.Domain.AggregateRoots.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AuthService.Domain.AggregateRoots.User", b =>
                 {
                     b.OwnsOne("AuthService.Domain.ValueObjects.PasswordHash", "PasswordHash", b1 =>
@@ -190,6 +245,12 @@ namespace AuthService.Infrastructure.Persistence.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
                         });
+
+                    b.HasOne("AuthService.Domain.AggregateRoots.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("PasswordHash")
                         .IsRequired();

@@ -28,6 +28,9 @@ public class AddRoleToUserCommandHandler :
         if (role is null)
             return Result.Failure(new Error("Role.NotFound", "No roles found with the given id"));
 
+        if (user.TenantId != role.TenantId)
+            return Result.Failure(new Error("Role.TenantMismatch", "Role and user belong to different tenants."));
+
         user.AssignRole(role);
         await _users.UpdateAsync(user);
 

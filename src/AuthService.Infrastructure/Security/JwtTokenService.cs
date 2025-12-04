@@ -86,6 +86,7 @@ public class JwtTokenService : ITokenService
         yield return new Claim(ClaimTypes.NameIdentifier, user.Id.ToString());
         yield return new Claim(ClaimTypes.Name, user.Email.Value);
         yield return new Claim(ClaimTypes.Email, user.Email.Value);
+        yield return new Claim("tenant", user.TenantId.ToString());
 
         // Roles
         foreach (var role in user.Roles)
