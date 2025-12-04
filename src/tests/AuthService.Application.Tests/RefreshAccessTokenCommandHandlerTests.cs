@@ -25,11 +25,14 @@ public class RefreshTokenCommandHandlerTests
         // Arrange
         var refreshTokenString = "valid-refresh-token";
 
+        var tenantId = Guid.NewGuid();
+
         var user = User.Create(
             Email.Create("user@example.com"),
             PasswordHash.Create("hash", "salt"),
             "Mario",
-            "Rossi");
+            "Rossi",
+            tenantId);
 
         var refreshToken = RefreshToken.Create(
             user.Id,

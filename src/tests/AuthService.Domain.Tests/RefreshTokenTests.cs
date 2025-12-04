@@ -12,11 +12,13 @@ namespace AuthService.Domain.Tests;
 [TestClass]
 public class RefreshTokenTests
 {
+
     User correctUser = User.Create(
             Email.Create("user@example.com"),
             PasswordHash.Create("hash", "salt"),
             "Mario",
-            "Rossi");
+            "Rossi",
+            Guid.NewGuid());
     [TestMethod]
     public void CreateRefreshToken_ShouldSetDataAndRaiseEvent()
     {

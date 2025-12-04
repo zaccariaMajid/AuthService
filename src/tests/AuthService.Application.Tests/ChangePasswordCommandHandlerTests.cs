@@ -23,12 +23,14 @@ public class ChangePasswordCommandHandlerTests
     {
         // Arrange
         var userId = Guid.NewGuid();
+        var tenantId = Guid.NewGuid();
 
         var user = User.Create(
             Email.Create("user@example.com"),
             PasswordHash.Create("oldHash", "oldSalt"),
             "Mario",
-            "Rossi");
+            "Rossi",
+            tenantId);
 
         // mock GetByIdAsync
         _userRepo.Setup(r => r.GetByIdAsync(userId))
@@ -98,12 +100,14 @@ public class ChangePasswordCommandHandlerTests
     {
         // Arrange
         var userId = Guid.NewGuid();
+        var tenantId = Guid.NewGuid();
 
         var user = User.Create(
             Email.Create("user@example.com"),
             PasswordHash.Create("oldHash", "oldSalt"),
             "Mario",
-            "Rossi");
+            "Rossi",
+            tenantId);
 
         _userRepo.Setup(r => r.GetByIdAsync(userId))
             .ReturnsAsync(user);

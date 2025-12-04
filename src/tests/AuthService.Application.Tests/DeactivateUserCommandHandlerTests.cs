@@ -21,12 +21,14 @@ public class DeactivateUserCommandHandlerTests
     {
         // Arrange
         var userId = Guid.NewGuid();
+        var tenantId = Guid.NewGuid();
 
         var user = User.Create(
             Email.Create("user@example.com"),
             PasswordHash.Create("hash", "salt"),
             "Mario",
-            "Rossi");
+            "Rossi",
+            tenantId);
 
         // Make the user active
         user.Activate();
@@ -77,12 +79,14 @@ public class DeactivateUserCommandHandlerTests
     {
         // Arrange
         var userId = Guid.NewGuid();
+        var tenantId = Guid.NewGuid();
 
         var user = User.Create(
             Email.Create("user@example.com"),
             PasswordHash.Create("hash", "salt"),
             "Mario",
-            "Rossi");
+            "Rossi",
+            tenantId);
 
         // Ensure user is inactive
         Assert.IsFalse(user.IsActive);
