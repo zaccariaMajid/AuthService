@@ -20,7 +20,7 @@ public static class DependencyInjection
             this IServiceCollection services,
             IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("ConnectionString") 
+        var connectionString = configuration.GetConnectionString("ConnectionString")
             ?? configuration["ConnectionString"]
             ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
         services.AddDbContext<AuthDbContext>(options =>
@@ -35,7 +35,7 @@ public static class DependencyInjection
 
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<ITokenService, JwtTokenService>();
-        
+
         // Bind JwtSettings using the Options pattern
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 

@@ -20,9 +20,9 @@ public class JwtTokenService : ITokenService
     public JwtTokenService(IOptions<JwtSettings> options)
     {
         _settings = options.Value ?? throw new ArgumentNullException(nameof(options));
-        
+
         ValidateSettings();
-        
+
         _tokenHandler = new JwtSecurityTokenHandler();
         _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecretKey));
     }
@@ -35,7 +35,7 @@ public class JwtTokenService : ITokenService
         var credentials = new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256);
 
         var now = DateTime.UtcNow;
-        
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),

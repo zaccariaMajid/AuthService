@@ -76,30 +76,30 @@ public class AddPermissionToRoleCommandHandlerTests
     }
 
     [TestMethod]
-        public async Task Handle_PermissionNotFound_ShouldReturnFailure()
-        {
-            var roleId = Guid.NewGuid();
-            var permissionId = Guid.NewGuid();
+    public async Task Handle_PermissionNotFound_ShouldReturnFailure()
+    {
+        var roleId = Guid.NewGuid();
+        var permissionId = Guid.NewGuid();
 
-            var role = Role.Create("Manager", "Manager role", tenantId: _tenantId);
+        var role = Role.Create("Manager", "Manager role", tenantId: _tenantId);
 
-            _roleRepo.Setup(r => r.GetByIdAsync(roleId))
-                .ReturnsAsync(role);
+        _roleRepo.Setup(r => r.GetByIdAsync(roleId))
+            .ReturnsAsync(role);
 
-            _permissionRepo.Setup(p => p.GetByIdAsync(permissionId))
-                .ReturnsAsync((Permission?)null);
+        _permissionRepo.Setup(p => p.GetByIdAsync(permissionId))
+            .ReturnsAsync((Permission?)null);
 
-            var command = new AddPermissionToRoleCommand(roleId, permissionId);
+        var command = new AddPermissionToRoleCommand(roleId, permissionId);
 
-            var handler = new AddPermissionToRoleCommandHandler(
-                _roleRepo.Object,
-                _permissionRepo.Object);
+        var handler = new AddPermissionToRoleCommandHandler(
+            _roleRepo.Object,
+            _permissionRepo.Object);
 
-            var result = await handler.HandleAsync(command, CancellationToken.None);
+        var result = await handler.HandleAsync(command, CancellationToken.None);
 
-            Assert.IsTrue(result.IsFailure);
-            Assert.AreEqual("Permission.NotFound", result.Error.Code);
+        Assert.IsTrue(result.IsFailure);
+        Assert.AreEqual("Permission.NotFound", result.Error.Code);
 
-            _roleRepo.Verify(r => r.UpdateAsync(It.IsAny<Role>()), Times.Never);
-        }
+        _roleRepo.Verify(r => r.UpdateAsync(It.IsAny<Role>()), Times.Never);
+    }
 }

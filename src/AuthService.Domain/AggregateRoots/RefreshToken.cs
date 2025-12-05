@@ -29,10 +29,10 @@ public class RefreshToken : AggregateRoot<Guid>
     }
     public static RefreshToken Create(Guid userId, string token, DateTime expiresAt)
     {
-        if(userId == Guid.Empty)
+        if (userId == Guid.Empty)
             throw new DomainException("UserId cannot be empty.", nameof(userId));
 
-        if(string.IsNullOrWhiteSpace(token))
+        if (string.IsNullOrWhiteSpace(token))
             throw new DomainException("Token cannot be null or empty.", nameof(token));
 
         return new RefreshToken

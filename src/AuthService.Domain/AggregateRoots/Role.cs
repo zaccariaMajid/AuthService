@@ -45,7 +45,7 @@ public class Role : AggregateRoot<Guid>
         if (permission is null)
             throw new DomainException("Permission Not Found", nameof(permission));
 
-        if(Permissions is null)
+        if (Permissions is null)
             Permissions = new List<Permission>();
 
         if (!Permissions.Contains(permission))
@@ -64,7 +64,7 @@ public class Role : AggregateRoot<Guid>
         if (Permissions is not null && Permissions.Contains(permission))
         {
             Permissions.Remove(permission);
-            if(Permissions.Count == 0)
+            if (Permissions.Count == 0)
                 Permissions = null;
 
             Touch();

@@ -26,7 +26,7 @@ public class UserTests
             _tenantId);
         role = Role.Create("Admin", "Administrator role", tenantId: _tenantId);
     }
-    
+
     [TestMethod]
     public void CreateUser_ShouldSetDataAndRaiseEvent()
     {
