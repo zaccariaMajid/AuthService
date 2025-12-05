@@ -26,6 +26,8 @@ AuthService is a modular, PostgreSQL-backed authentication and authorization ser
 ## API Overview (all POST)
 - `POST /api/tenants` – `{ name, description? }`
 - `POST /api/tenants/activate` / `deactivate` – `{ tenantId }`
+- `POST /api/tenants/{tenantId}/products` – `{ productId }`
+- `POST /api/products` – `{ name, description? }`
 - `POST /api/auth/register` – `{ firstName, lastName, email, password, tenantId }`
 - `POST /api/auth/login` – `{ email, password, tenantId }`
 - `POST /api/auth/refresh` – `{ refreshToken }`

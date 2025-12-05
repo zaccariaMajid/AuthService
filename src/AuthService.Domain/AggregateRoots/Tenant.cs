@@ -41,4 +41,16 @@ public sealed class Tenant : AggregateRoot<Guid>
         IsActive = false;
         Touch();
     }
+
+    public void AddProduct(Product product)
+    {
+        if (product is null)
+            throw new DomainException("Product cannot be null.", nameof(product));
+
+        if (Products.Any(p => p.Id == product.Id))
+            return;
+
+        Products.Add(product);
+        Touch();
+    }
 }

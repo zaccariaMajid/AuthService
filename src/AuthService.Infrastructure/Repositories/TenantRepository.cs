@@ -13,4 +13,9 @@ public class TenantRepository : EfRepository<Tenant>, ITenantRepository
     public async Task<Tenant?> GetByNameAsync(string name)
         => await _db.Set<Tenant>()
             .FirstOrDefaultAsync(t => t.Name == name);
+
+    public async Task<Tenant?> GetByIdWithProductsAsync(Guid id)
+        => await _db.Set<Tenant>()
+            .Include(t => t.Products)
+            .FirstOrDefaultAsync(t => t.Id == id);
 }
