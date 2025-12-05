@@ -20,5 +20,23 @@ public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
             .IsRequired();
 
         builder.HasIndex(t => t.Name).IsUnique();
+
+        builder.HasMany(t => t.Products)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+                "TenantProducts",
+                right => right.HasOne<Product>()
+                    .WithMany()
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                left => left.HasOne<Tenant>()
+                    .WithMany()
+                    .HasForeignKey("TenantId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                join =>
+                {
+                    join.HasKey("TenantId", "ProductId");
+                    join.ToTable("TenantProducts");
+                });
     }
 }

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthService.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20251130233558_InitialCreate")]
+    [Migration("20251205231923_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -47,6 +47,36 @@ namespace AuthService.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("AuthService.Domain.AggregateRoots.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("AuthService.Domain.AggregateRoots.RefreshToken", b =>
@@ -107,10 +137,10 @@ namespace AuthService.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TenantId");
+
                     b.HasIndex("Name", "TenantId")
                         .IsUnique();
-
-                    b.HasIndex("TenantId");
 
                     b.ToTable("Roles");
                 });
@@ -177,10 +207,10 @@ namespace AuthService.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TenantId");
+
                     b.HasIndex("Email", "TenantId")
                         .IsUnique();
-
-                    b.HasIndex("TenantId");
 
                     b.ToTable("Users");
                 });
@@ -198,6 +228,21 @@ namespace AuthService.Infrastructure.Persistence.Migrations
                     b.HasIndex("PermissionId");
 
                     b.ToTable("RolePermissions", (string)null);
+                });
+
+            modelBuilder.Entity("TenantProducts", b =>
+                {
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("TenantId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("TenantProducts", (string)null);
                 });
 
             modelBuilder.Entity("UserRoles", b =>
@@ -226,6 +271,12 @@ namespace AuthService.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AuthService.Domain.AggregateRoots.User", b =>
                 {
+                    b.HasOne("AuthService.Domain.AggregateRoots.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.OwnsOne("AuthService.Domain.ValueObjects.PasswordHash", "PasswordHash", b1 =>
                         {
                             b1.Property<Guid>("UserId")
@@ -249,12 +300,6 @@ namespace AuthService.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("UserId");
                         });
 
-                    b.HasOne("AuthService.Domain.AggregateRoots.Tenant", null)
-                        .WithMany()
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("PasswordHash")
                         .IsRequired();
                 });
@@ -270,6 +315,21 @@ namespace AuthService.Infrastructure.Persistence.Migrations
                     b.HasOne("AuthService.Domain.AggregateRoots.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TenantProducts", b =>
+                {
+                    b.HasOne("AuthService.Domain.AggregateRoots.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AuthService.Domain.AggregateRoots.Tenant", null)
+                        .WithMany()
+                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
